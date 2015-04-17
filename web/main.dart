@@ -1,5 +1,6 @@
 import 'package:libgame/libgame.dart';
 import 'dart:async';
+import 'dart:html';
 
 main() async {
   await init();
@@ -10,10 +11,13 @@ main() async {
 
   List <Actor> bunnies = room1.getActorsByTag('bunny');
 
-  stage.onMouseClick.listen((_) => activateRoom('room2'));
-  stage.onMouseContextMenu.listen((_) => activateRoom('room1'));
-  stage.onMouseWheel.listen((event) {
-    bunnies.forEach((Actor bunny) => bunny.velocity.x += event.deltaY/50);
+
+  document.onKeyUp.listen((event) {
+    bunnies.forEach((Actor bunny) {
+      bunny.velocity.y -= 10;
+    });
   });
+
+
 
 }

@@ -13,11 +13,7 @@ class GravitySystem extends EntityProcessingSystem {
 
   processEntity(Entity entity) {
     ForceComponent force = forceMapper[entity];
-
-    force.y += 1;
-
-    if (force.y > 1 )
-      force.y = 1;
+    force.y += 0.1;
   }
 }
 
@@ -57,14 +53,18 @@ class MovementSystem extends EntityProcessingSystem {
     velocity.x += acceleration.x;
     velocity.y += acceleration.y;
 
-    if (velocity.x > 5)
-      velocity.x = 5;
-    if (velocity.y > 5)
-      velocity.y = 5;
-
     // update position
     position.x += velocity.x;
     position.y += velocity.y;
+
+
+    if (position.y > 600) {
+      position.y = 600;
+      velocity.y = 0;
+      acceleration.y = 0;
+      force.y = 0;
+    }
+
   }
 }
 
