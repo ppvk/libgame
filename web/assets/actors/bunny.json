@@ -1,0 +1,5 @@
+{
+  "name"  : "Bunny",
+  "sprite": "bunny.json",
+  "mass"  : 1
+}

@@ -1,0 +1,17 @@
+{
+  "originX": 0,
+  "originY": 0,
+  "bitmaps" :
+  [
+    {
+      "bitmap": "bunny.png",
+      "offsetX" : 0,
+      "offsetY" : 0
+    },
+    {
+      "bitmap": "eyes.png",
+      "offsetX" : 35,
+      "offsetY" : 52
+    }
+  ]
+}
