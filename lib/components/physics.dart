@@ -1,6 +1,5 @@
 part of libgame;
 
-
 class GravitySystem extends EntityProcessingSystem {
   Mapper<ForceComponent> forceMapper;
   Mapper<MassComponent> massMapper;
@@ -24,8 +23,6 @@ class GravitySystem extends EntityProcessingSystem {
 
 
 
-
-
 class MovementSystem extends EntityProcessingSystem {
   Mapper<PositionComponent> positionMapper;
   Mapper<VelocityComponent> velocityMapper;
@@ -35,6 +32,7 @@ class MovementSystem extends EntityProcessingSystem {
 
   MovementSystem() : super(Aspect.getAspectForAllOf(
       [PositionComponent, VelocityComponent, AccelerationComponent, ForceComponent, MassComponent]));
+
 
   initialize() {
     positionMapper = new Mapper <PositionComponent> (PositionComponent, world);
@@ -63,7 +61,6 @@ class MovementSystem extends EntityProcessingSystem {
       velocity.x = 5;
     if (velocity.y > 5)
       velocity.y = 5;
-
 
     // update position
     position.x += velocity.x;

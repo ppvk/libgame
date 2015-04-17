@@ -60,6 +60,7 @@ init() async {
   await resources.load();
   Map masterDef = JSON.decode(resources.getTextFile('definitions'));
 
+
   // Load the key binding data
   keybinds = masterDef['keybinds'];
 

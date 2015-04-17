@@ -11,7 +11,9 @@ class DefinitionTransformer extends Transformer {
   Future apply(Transform transform) async {
     if (transform.primaryInput.id.path.contains('assets/definition.json')) {
 
+
       Map definitions = JSON.decode(await transform.primaryInput.readAsString());;
+
 
       Directory assetDir = new Directory('web/assets');
       List assetDirectories =  assetDir.listSync()
