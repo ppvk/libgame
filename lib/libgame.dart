@@ -93,5 +93,6 @@ worldLoop() async {
   await window.animationFrame;
   world.process();
   world.processEntityChanges();
+  stage.juggler.advanceTime(world.delta);
   worldLoop();
 }
