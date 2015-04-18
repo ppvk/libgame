@@ -17,8 +17,6 @@ part 'components/graphics.dart';
 
 part 'generators/room.dart';
 part 'generators/actor.dart';
-part 'generators/deco.dart';
-part 'generators/sprite.dart';
 
 // Entity wrappers for convenience
 part 'entities/actor.dart';
@@ -30,7 +28,6 @@ RenderLoop loop;
 
 ResourceManager roomFiles;
 ResourceManager actorFiles;
-ResourceManager spriteFiles;
 ResourceManager imageFiles;
 
 Map<String, Entity> actors = {};
@@ -54,7 +51,6 @@ init() async {
   // (Allows us to have and actor AND a sprite called 'bob.json')
   roomFiles = new ResourceManager();
   actorFiles = new ResourceManager();
-  spriteFiles = new ResourceManager();
   imageFiles = new ResourceManager();
 
   // load then decode the master definition file
@@ -69,7 +65,6 @@ init() async {
   // Throw errors if the directory structure is wrong
   if (masterDef['rooms'] == null)  throw("'assets/rooms' directory is missing");
   if (masterDef['actors'] == null)  throw("'assets/actors' directory is missing");
-  if (masterDef['sprites'] == null) throw("'assets/sprites' directory is missing");
   if (masterDef['images'] == null)  throw("'assets/images' directory is missing");
 
   // Load all the rooms

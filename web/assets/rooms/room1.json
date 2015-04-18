@@ -12,7 +12,7 @@
       "actor" : "bunny.json",
       "flipped": true,
       "x" : 400,
-      "y" : 200
+      "y" : 600
     },
     {
       "name" : "Bunny2",
@@ -22,15 +22,7 @@
       "actor" : "bunny.json",
       "flipped": false,
       "x" : 200,
-      "y" : 200
-    }
-  ],
-  "decos" : [
-    {
-      "sprite" : "bunny.json",
-      "flipped": true,
-      "x" : 300,
-      "y" : 200
+      "y" : 600
     }
   ]
 }

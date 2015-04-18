@@ -39,9 +39,36 @@ Future <Entity> createActor(
       new ForceComponent());
 
   // If the definition contains a sprite, generate it and add it to the entity.
+  print('actor ' + actorDef.toString());
   if (actorDef.containsKey('sprite')) {
-    SpriteComponent sprite = await createSprite(actorDef['sprite'], flipped);
-    entity.addComponent(sprite);
+
+    Sprite sprite  = new Sprite();
+    Map spriteDef = actorDef['sprite'];
+
+    print(spriteDef);
+    // add the various bitmaps
+    for (Map bitmapDef in spriteDef['bitmaps']) {
+
+      // Load the image into memory if needed
+      if (!imageFiles.containsBitmapData(bitmapDef['bitmap'])) {
+        imageFiles.addBitmapData(bitmapDef['bitmap'], 'assets/images/${bitmapDef['bitmap']}');
+        print('loading bitmap ${bitmapDef['bitmap']}');
+        await imageFiles.load();
+      }
+
+      Bitmap bitmap = new Bitmap(imageFiles.getBitmapData(bitmapDef['bitmap']))
+        ..x = bitmapDef['offsetX']
+        ..y = bitmapDef['offsetY'];
+      sprite.addChild(bitmap);
+    }
+
+    // Set the origin of the Sprite
+    if (spriteDef.containsKey('originX'))
+      sprite.pivotX = spriteDef['originX'];
+    if (spriteDef.containsKey('originY'))
+      sprite.pivotY = spriteDef['originY'];
+
+    entity.addComponent(new SpriteComponent(sprite, flipped));
   }
 
   world.addEntity(entity);

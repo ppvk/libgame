@@ -18,18 +18,6 @@ Future <Entity> createRoom(String roomFile) async {
           roomDef['height']
   ));
 
-  // Populate the room's decos
-  for (Map deco in roomDef['decos']) {
-    Entity decoEntity = await createDeco(
-      deco['sprite'],
-      deco['flipped'],
-      deco['x'],
-      deco['y']
-    );
-
-    decoEntity.addComponent(new RoomComponent(room));
-  }
-
   // Populate the room's actors.
   Bag <Entity> actors = new Bag();
   for (Map actor in roomDef['actors']) {
@@ -45,7 +33,6 @@ Future <Entity> createRoom(String roomFile) async {
     actorEntity.addComponent(
       new RoomComponent(room)
     );
-
     actors.add(actorEntity);
   }
   room.addComponent(
