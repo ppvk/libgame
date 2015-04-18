@@ -1,12 +1,12 @@
 part of libgame;
 
 
-class SpriteSystem extends EntityProcessingSystem {
+class DrawSystem extends EntityProcessingSystem {
   Mapper<PositionComponent> positionMapper;
   Mapper<SpriteComponent> spriteMapper;
   Mapper<RoomComponent> roomMapper;
 
-  SpriteSystem() : super(Aspect.getAspectForAllOf([PositionComponent, SpriteComponent, RoomComponent]));
+  DrawSystem() : super(Aspect.getAspectForAllOf([PositionComponent, SpriteComponent, RoomComponent]));
 
   initialize() {
     positionMapper = new Mapper <PositionComponent> (PositionComponent, world);

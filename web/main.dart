@@ -11,10 +11,15 @@ main() async {
 
   List <Actor> bunnies = room1.getActorsByTag('bunny');
 
+  for (Actor bunny in bunnies) {
+    bunny.sprite.sprite.onMouseClick.listen((_) {
+      bunny.force.impulse(25, 3, 5);
+    });
+  }
 
   document.onKeyUp.listen((event) {
     bunnies.forEach((Actor bunny) {
-      bunny.velocity.y -= 10;
+      bunny.velocity.y -= 3;
     });
   });
 

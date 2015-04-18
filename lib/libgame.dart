@@ -1,6 +1,7 @@
 library libgame;
 import 'dart:html';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:stagexl/stagexl.dart';
@@ -16,6 +17,7 @@ part 'components/graphics.dart';
 
 part 'generators/room.dart';
 part 'generators/actor.dart';
+part 'generators/deco.dart';
 part 'generators/sprite.dart';
 
 // Entity wrappers for convenience
@@ -83,7 +85,7 @@ init() async {
   world
     ..addSystem(new MovementSystem())
     ..addSystem(new GravitySystem())
-    ..addSystem(new SpriteSystem())
+    ..addSystem(new DrawSystem())
     ..addSystem(new RoomSystem())
     ..initialize();
   worldLoop();

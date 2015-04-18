@@ -24,5 +24,13 @@
       "x" : 200,
       "y" : 200
     }
+  ],
+  "decos" : [
+    {
+      "sprite" : "bunny.json",
+      "flipped": true,
+      "x" : 300,
+      "y" : 200
+    }
   ]
 }

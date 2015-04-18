@@ -1,5 +1,6 @@
 part of libgame;
 
+
 class GravitySystem extends EntityProcessingSystem {
   Mapper<ForceComponent> forceMapper;
   Mapper<MassComponent> massMapper;
@@ -13,7 +14,7 @@ class GravitySystem extends EntityProcessingSystem {
 
   processEntity(Entity entity) {
     ForceComponent force = forceMapper[entity];
-    force.y += 0.1;
+    //force.y += 0.1;
   }
 }
 
@@ -46,8 +47,8 @@ class MovementSystem extends EntityProcessingSystem {
     MassComponent mass = massMapper[entity];
 
     // update acceleration
-    acceleration.x += force.x / mass.value;
-    acceleration.y += force.y / mass.value;
+    acceleration.x += force.calculatedX / mass.value;
+    acceleration.y += force.calculatedY / mass.value;
 
     // update velocity
     velocity.x += acceleration.x;
@@ -60,9 +61,8 @@ class MovementSystem extends EntityProcessingSystem {
 
     if (position.y > 600) {
       position.y = 600;
-      velocity.y = 0;
+      velocity.y = -velocity.y/2;
       acceleration.y = 0;
-      force.y = 0;
     }
 
   }
@@ -93,7 +93,42 @@ class MassComponent extends Component {
 }
 
 class ForceComponent extends Component {
+  List<Force> forces;
+
+  // calculates the total of x forces
+  get calculatedX {
+    num x = 0;
+    for (Force force in forces)
+      x += force.x;
+    return x;
+  }
+  // calculates the total of the y forces
+  get calculatedY {
+    num y = 0;
+    for (Force force in forces)
+      y += force.y;
+    return y;
+  }
+
+  ForceComponent() {
+    this.forces = [];
+  }
+
+  impulse(num angle, num force, num duration) {
+    num x = force * math.cos(angle);
+    num y = force * math.sin(angle);
+
+    Force newForce = new Force(x,y);
+    forces.add(newForce);
+
+    new Timer(new Duration (milliseconds: duration), () {
+      forces.remove(newForce);
+    });
+  }
+}
+// Data-holding abstraction of a force.
+class Force {
   num x;
   num y;
-  ForceComponent(this.x, this.y);
+  Force(this.x, this.y);
 }

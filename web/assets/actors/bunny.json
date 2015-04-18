@@ -1,5 +1,5 @@
 {
   "name"  : "Bunny",
   "sprite": "bunny.json",
-  "mass"  : 100
+  "mass"  : 10
 }
