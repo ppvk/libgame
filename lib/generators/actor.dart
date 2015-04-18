@@ -36,8 +36,7 @@ Future <Entity> createActor(
     ..addComponent(
       new AccelerationComponent(0,0))
     ..addComponent(
-      new ForceComponent()
-      ..forces.add(new Force(0,1)));
+      new ForceComponent());
 
   // If the definition contains a sprite, generate it and add it to the entity.
   if (actorDef.containsKey('sprite')) {

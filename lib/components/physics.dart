@@ -57,14 +57,6 @@ class MovementSystem extends EntityProcessingSystem {
     // update position
     position.x += velocity.x;
     position.y += velocity.y;
-
-
-    if (position.y > 600) {
-      position.y = 600;
-      velocity.y = -velocity.y/2;
-      acceleration.y = 0;
-    }
-
   }
 }
 
