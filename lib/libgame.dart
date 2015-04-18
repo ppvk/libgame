@@ -43,7 +43,10 @@ init() async {
   // Creating StageXLs objects;
   ResourceManager resources = new ResourceManager();;
   CanvasElement canvas = querySelector('canvas');
-  stage = new Stage(canvas, webGL: true);
+
+  canvas.context2D.imageSmoothingEnabled = false;
+
+  stage = new Stage(canvas);
   loop = new RenderLoop()
     ..addStage(stage);
 
