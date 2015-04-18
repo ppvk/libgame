@@ -75,7 +75,6 @@ init() async {
     );
   }
 
-  print('activating Systems');
   // Activate Systems and begin the render loop(s)
   world
     ..addSystem(new MovementSystem())

@@ -3,9 +3,7 @@ part of libgame;
 // convenience wrapper class.
 class Room {
 
-  Room(this._entity) {
-    print('constructed');
-  }
+  Room(this._entity);
   Entity _entity;
 
   DisplayContainerComponent get display => _entity.getComponentByClass(DisplayContainerComponent);

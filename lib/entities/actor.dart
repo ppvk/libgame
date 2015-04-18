@@ -3,9 +3,7 @@ part of libgame;
 // convenience wrapper class.
 class Actor {
 
-  Actor(this.entity) {
-    print('constructed');
-  }
+  Actor(this.entity);
   Entity entity;
 
   PositionComponent get position => entity.getComponentByClass(PositionComponent);

@@ -20,7 +20,6 @@ Future <Entity> createActor(
 
   Entity entity = world.createEntity();
 
-  print('Setting components for Actor');
   // Set the entities position
   entity
     ..addComponent(
@@ -39,13 +38,11 @@ Future <Entity> createActor(
       new ForceComponent());
 
   // If the definition contains a sprite, generate it and add it to the entity.
-  print('actor ' + actorDef.toString());
   if (actorDef.containsKey('sprite')) {
 
     Sprite sprite  = new Sprite();
     Map spriteDef = actorDef['sprite'];
 
-    print(spriteDef);
     // add the various bitmaps
     for (Map bitmapDef in spriteDef['bitmaps']) {
 
