@@ -46,7 +46,7 @@ init() async {
 
   canvas.context2D.imageSmoothingEnabled = false;
 
-  stage = new Stage(canvas, webGl: true);
+  stage = new Stage(canvas, webGL: true);
   loop = new RenderLoop()
     ..addStage(stage);
 
