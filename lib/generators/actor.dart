@@ -12,8 +12,8 @@ Future <Entity> createActor(
   if (!actorFiles.containsTextFile(actorFile)) {
     actorFiles.addTextFile(actorFile,'assets/actors/$actorFile');
     print('loading actor $actorFile');
-    await actorFiles.load();
   }
+  await actorFiles.load();
 
   // Decode the actor data
   Map actorDef = JSON.decode(actorFiles.getTextFile(actorFile));
@@ -50,8 +50,8 @@ Future <Entity> createActor(
       if (!imageFiles.containsBitmapData(bitmapDef['bitmap'])) {
         imageFiles.addBitmapData(bitmapDef['bitmap'], 'assets/images/${bitmapDef['bitmap']}');
         print('loading bitmap ${bitmapDef['bitmap']}');
-        await imageFiles.load();
       }
+      await imageFiles.load();
 
       Bitmap bitmap = new Bitmap(imageFiles.getBitmapData(bitmapDef['bitmap']))
         ..x = bitmapDef['offsetX']
