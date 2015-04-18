@@ -3,12 +3,12 @@ part of libgame;
 // convenience wrapper class.
 class Room {
 
-  Room(this._entity);
-  Entity _entity;
+  Room(this.entity);
+  Entity entity;
 
-  DisplayContainerComponent get display => _entity.getComponentByClass(DisplayContainerComponent);
+  DisplayContainerComponent get display => entity.getComponentByClass(DisplayContainerComponent);
 
-  Bag get actorEntities => (_entity.getComponentByClass(EntityBagComponent) as EntityBagComponent).entities;
+  Bag get actorEntities => (entity.getComponentByClass(EntityBagComponent) as EntityBagComponent).entities;
 
   Actor getActorByName(String name) {
     Entity actorEntity = actorEntities.singleWhere((Entity e)
