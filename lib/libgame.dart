@@ -44,7 +44,7 @@ init() async {
   ResourceManager resources = new ResourceManager();;
   CanvasElement canvas = querySelector('canvas');
 
-  canvas.context2D.imageSmoothingEnabled = false;
+  //canvas.context2D.imageSmoothingEnabled = false;
 
   stage = new Stage(canvas, webGL: true);
   loop = new RenderLoop()
