@@ -46,7 +46,7 @@ init() async {
 
   canvas.context2D.imageSmoothingEnabled = false;
 
-  stage = new Stage(canvas);
+  stage = new Stage(canvas, webGl: true);
   loop = new RenderLoop()
     ..addStage(stage);
 
@@ -93,6 +93,5 @@ worldLoop() async {
   await window.animationFrame;
   world.process();
   world.processEntityChanges();
-  loop.advanceTime(world.delta);
   worldLoop();
 }
