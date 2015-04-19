@@ -6,6 +6,12 @@ class Actor {
   Actor(this.entity);
   Entity entity;
 
+
+  bool hasTag(String tag) {
+    MetaComponent meta = entity.getComponentByClass(MetaComponent);
+    return meta.meta['tags'].contains(tag);
+  }
+
   PositionComponent get position => entity.getComponentByClass(PositionComponent);
   VelocityComponent get velocity => entity.getComponentByClass(VelocityComponent);
   AccelerationComponent get acceleration => entity.getComponentByClass(AccelerationComponent);
