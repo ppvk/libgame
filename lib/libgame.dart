@@ -36,14 +36,13 @@ Map<String, Entity> rooms = {};
 Map keybinds;
 List <Function> _gameLoopExtras = [];
 
-init() async {
+init(CanvasElement canvas) async {
 
   // Create and add systems to the world
   world = new World();
 
   // Creating StageXLs objects;
   ResourceManager resources = new ResourceManager();;
-  CanvasElement canvas = querySelector('canvas');
 
   //canvas.context2D.imageSmoothingEnabled = false;
 
