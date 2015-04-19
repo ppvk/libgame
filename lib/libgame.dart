@@ -34,6 +34,7 @@ Map<String, Entity> actors = {};
 Map<String, Entity> rooms = {};
 
 Map keybinds;
+List <Function> _gameLoopExtras = [];
 
 init() async {
 
@@ -94,5 +95,9 @@ worldLoop() async {
   world.process();
   world.processEntityChanges();
   stage.juggler.advanceTime(world.delta);
+  for (Function f in _gameLoopExtras)
+    f();
   worldLoop();
 }
+
+addToGameLoop(Function f) => _gameLoopExtras.add(f);
