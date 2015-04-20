@@ -17,7 +17,7 @@ class Room
 	}
 
 	List<Actor> getActorsByTag(String tag) {
-		List<Entity> entities = actorEntities.where((Entity e) => (e.getComponentByClass(MetaComponent) as MetaComponent).meta['tags'].contains(tag));
+		Iterable<Entity> entities = actorEntities.where((Entity e) => (e.getComponentByClass(MetaComponent) as MetaComponent).meta['tags'].contains(tag));
 		List <Actor> actors = [];
 		for(Entity e in entities)
 			actors.add(new Actor(e));
