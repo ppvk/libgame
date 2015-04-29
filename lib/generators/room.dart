@@ -1,55 +1,60 @@
 part of libgame;
 
+
+
 /// Used during init() to generate rooms from data files
-Future <Entity> createRoom(String roomFile) async {
-  // Get the room file
-  roomFiles.addTextFile(roomFile,'assets/rooms/$roomFile');
-  await roomFiles.load();
+Future <Entity> createRoom(String roomName, Map roomDef) async {
 
-  // Decode the room data
-  Map roomDef = JSON.decode(roomFiles.getTextFile(roomFile));
+  //Create an empty entity
+  Entity room = WORLD.createEntity();
 
-  Entity room = world.createEntity()
-  ..addComponent(
-      new DisplayContainerComponent(
-          roomDef['x'],
-          roomDef['y'],
-          roomDef['width'],
-          roomDef['height']
-  ));
+  List <Entity> roomEntities = [];
+
+  // Populate the rooms decos
+  for (Map deco in roomDef['decos']) {
+    Entity decoEntity = WORLD.createEntity()
+      ..addComponent(await createDecoSprite(deco))
+      ..addComponent(new PositionComponent(deco['x'], deco['y']))
+      ..addComponent(new CurrentRoomComponent(room));
+
+    roomEntities.add(decoEntity);
+  }
 
   // Populate the room's actors.
-  Bag <Entity> actors = new Bag();
   for (Map actor in roomDef['actors']) {
     Entity actorEntity =
-      await createActor(
-          actor['name'],
-          actor['tags'],
-          actor['actor'],
-          actor['x'],
-          actor['y'],
-          actor['flipped']);
+      await createActor(actor);
 
     actorEntity.addComponent(
-      new RoomComponent(room)
+      new CurrentRoomComponent(room)
     );
-    actors.add(actorEntity);
+    roomEntities.add(actorEntity);
   }
+
   room.addComponent(
-    new EntityBagComponent(actors)
-  );
+    new RoomComponent(
+        roomEntities,
+        roomDef['x'],
+        roomDef['y'],
+        roomDef['width'],
+        roomDef['height']
+    ));
 
   // start disabled
   room.disable();
 
-  rooms[roomFile.split('.').first] = room;
+  // catalog the room with its filename as a key
+  rooms[roomName] = room;
   return room;
 }
 
-Room activateRoom(String room) {
+
+Entity _activeRoom;
+Entity get ACTIVE_ROOM => _activeRoom;
+Entity activateRoom(String room) {
   for (Entity room in rooms.values)
     room.disable();
   rooms[room].enable();
-
-  return new Room(rooms[room]);
+  _activeRoom = rooms[room];
+  rooms[room];
 }

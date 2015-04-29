@@ -25,13 +25,15 @@ class DefinitionTransformer extends Transformer {
 
         List assetFiles =  dir.listSync()
         .where((entity) => entity is File);
-        List <String> assetNames = [];
+        Map assetNames = {};
 
         for (FileSystemEntity fse in assetFiles) {
-          assetNames.add(fse.path.split('/').last);
+          if (fse.path.endsWith('.json'))
+            assetNames[fse.path.split('/').last.split('.').first] = JSON.decode((fse as File).readAsStringSync());
         }
 
-        definitions[directoryName] = assetNames;
+        if (assetNames.isNotEmpty)
+          definitions[directoryName] = assetNames;
       }
       transform.logger.info(definitions.toString());
 

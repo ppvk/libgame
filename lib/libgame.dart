@@ -5,84 +5,80 @@ import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:stagexl/stagexl.dart';
+import 'package:stagexl_spine/stagexl_spine.dart';
 import 'package:dartemis/dartemis.dart';
 
 export 'package:dartemis/dartemis.dart';
+export 'package:stagexl/stagexl.dart';
 
-part 'components/generic.dart';
-part 'components/controls.dart';
-part 'components/rooms.dart';
-part 'components/physics.dart';
-part 'components/graphics.dart';
+part 'systems/generic.dart';
+part 'systems/controls.dart';
+part 'systems/states.dart';
+part 'systems/camera.dart';
+part 'systems/rooms.dart';
+part 'systems/physics.dart';
+part 'systems/sprite.dart';
+part 'systems/animation.dart';
+part 'systems/skeleton.dart';
 
 part 'generators/room.dart';
 part 'generators/actor.dart';
+part 'generators/skeleton.dart';
+part 'generators/deco.dart';
 
-// Entity wrappers for convenience
-part 'entities/actor.dart';
-part 'entities/room.dart';
+World WORLD;
+Stage STAGE;
+ResourceManager RESOURCES;
+CanvasElement CANVAS;
+RenderLoop LOOP;
 
-World world;
-Stage stage;
-RenderLoop loop;
-
-ResourceManager roomFiles;
-ResourceManager actorFiles;
-ResourceManager imageFiles;
 
 Map<String, Entity> actors = {};
 Map<String, Entity> rooms = {};
 
-Map keybinds;
+Map _keybinds;
 List <Function> _gameLoopExtras = [];
 
 init(CanvasElement canvas) async {
+  WORLD = new World();
 
-  // Create and add systems to the world
-  world = new World();
+  RESOURCES = new ResourceManager();
+  CANVAS = canvas;
 
-  // Creating StageXLs objects;
-  ResourceManager resources = new ResourceManager();;
+  STAGE = new Stage(canvas, webGL:true, width: 1024, height: 768, color: Color.Black)
+    ..scaleMode = StageScaleMode.NO_BORDER
+    ..align = StageAlign.NONE;
 
-  //canvas.context2D.imageSmoothingEnabled = false;
-
-  stage = new Stage(canvas, webGL: true);
-  loop = new RenderLoop()
-    ..addStage(stage);
-
-  // Different resource managers for different kinds of files
-  // (Allows us to have and actor AND a sprite called 'bob.json')
-  roomFiles = new ResourceManager();
-  actorFiles = new ResourceManager();
-  imageFiles = new ResourceManager();
+  LOOP = new RenderLoop()
+    ..addStage(STAGE);
 
   // load then decode the master definition file
-  resources.addTextFile('definitions', 'assets/definition.json');
-  await resources.load();
-  Map masterDef = JSON.decode(resources.getTextFile('definitions'));
-
+  RESOURCES.addTextFile('definitions', 'assets/definition.json');
+  await RESOURCES.load();
+  Map masterDef = JSON.decode(RESOURCES.getTextFile('definitions'));
 
   // Load the key binding data
-  keybinds = masterDef['keybinds'];
-
-  // Throw errors if the directory structure is wrong
-  if (masterDef['rooms'] == null)  throw("'assets/rooms' directory is missing");
-  if (masterDef['actors'] == null)  throw("'assets/actors' directory is missing");
-  if (masterDef['images'] == null)  throw("'assets/images' directory is missing");
+  _keybinds = masterDef['keybinds'];
 
   // Load all the rooms
-  for (String roomFile in masterDef['rooms']) {
-    print('creating room $roomFile');
-    world.addEntity(
-        await createRoom(roomFile)
+  for (String room in masterDef['rooms'].keys) {
+    WORLD.addEntity(
+        await createRoom(room, masterDef['rooms'][room])
     );
   }
 
   // Activate Systems and begin the render loop(s)
-  world
-    ..addSystem(new MovementSystem())
-    ..addSystem(new GravitySystem())
+  WORLD
+    ..addSystem(new CameraSystem())
+    ..addSystem(new StateSystem())
+
+    ..addSystem(new VelocitySystem())
+    ..addSystem(new AccelerationSystem())
+
+    ..addSystem(new SkeletonSystem())
     ..addSystem(new DrawSystem())
+    ..addSystem(new AnimationSystem())
+
     ..addSystem(new RoomSystem())
     ..initialize();
   worldLoop();
@@ -91,9 +87,8 @@ init(CanvasElement canvas) async {
 // A little update loop
 worldLoop() async {
   await window.animationFrame;
-  world.process();
-  world.processEntityChanges();
-  stage.juggler.advanceTime(world.delta);
+  WORLD.process();
+  STAGE.juggler.advanceTime(WORLD.delta);
   for (Function f in _gameLoopExtras)
     f();
   worldLoop();

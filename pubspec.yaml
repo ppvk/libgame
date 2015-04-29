@@ -3,6 +3,7 @@ description: Filesystem based game organization.
 dependencies:
   browser: any
   stagexl: any
+  stagexl_spine: any
   dartemis: any
   barback: any
 transformers:

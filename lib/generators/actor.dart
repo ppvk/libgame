@@ -1,74 +1,44 @@
 part of libgame;
 
 // Assembles Actors for Rooms
-Future <Entity> createActor(
-    String name,
-    List<String> tags,
-    String actorFile,
-    num x, num y,
-    bool flipped) async {
+Future <Entity> createActor(Map actorDef) async {
 
-  // Load the file into memory if needed
-  if (!actorFiles.containsTextFile(actorFile)) {
-    actorFiles.addTextFile(actorFile,'assets/actors/$actorFile');
-    print('loading actor $actorFile');
-  }
-  await actorFiles.load();
+  Entity entity = WORLD.createEntity();
 
-  // Decode the actor data
-  Map actorDef = JSON.decode(actorFiles.getTextFile(actorFile));
-
-  Entity entity = world.createEntity();
-
-  // Set the entities position
   entity
     ..addComponent(
       new MetaComponent()
-      ..meta['name'] = name
-      ..meta['tags'] = tags)
+      ..meta['name'] = actorDef['name']
+      ..meta['tags'] = actorDef['tags'])
+
     ..addComponent(
-      new MassComponent(actorDef['mass']))
-    ..addComponent(
-      new PositionComponent(x, y))
+      new PositionComponent(actorDef['x'], actorDef['y']))
+
     ..addComponent(
       new VelocityComponent(0,0))
+
     ..addComponent(
       new AccelerationComponent(0,0))
+
     ..addComponent(
-      new ForceComponent());
+      await createSkeleton(
+          actorDef['skeleton'],
+          actorDef['flipped'],
+          actorDef['layer']));
 
-  // If the definition contains a sprite, generate it and add it to the entity.
-  if (actorDef.containsKey('sprite')) {
-
-    Sprite sprite  = new Sprite();
-    Map spriteDef = actorDef['sprite'];
-
-    // add the various bitmaps
-    for (Map bitmapDef in spriteDef['bitmaps']) {
-
-      // Load the image into memory if needed
-      if (!imageFiles.containsBitmapData(bitmapDef['bitmap'])) {
-        imageFiles.addBitmapData(bitmapDef['bitmap'], 'assets/images/${bitmapDef['bitmap']}');
-        print('loading bitmap ${bitmapDef['bitmap']}');
-      }
-      await imageFiles.load();
-
-      Bitmap bitmap = new Bitmap(imageFiles.getBitmapData(bitmapDef['bitmap']))
-        ..x = bitmapDef['offsetX']
-        ..y = bitmapDef['offsetY'];
-      sprite.addChild(bitmap);
-    }
-
-    // Set the origin of the Sprite
-    if (spriteDef.containsKey('originX'))
-      sprite.pivotX = spriteDef['originX'];
-    if (spriteDef.containsKey('originY'))
-      sprite.pivotY = spriteDef['originY'];
-
-    entity.addComponent(new SpriteComponent(sprite, flipped));
-  }
-
-  world.addEntity(entity);
-  actors[actorDef['name'].split('.').first] = entity;
+  actors[actorDef['name']] = entity;
   return entity;
+}
+
+
+class SpriteComponent extends Component {
+  Sprite sprite;
+  bool flipped;
+  String layer;
+  SpriteComponent(this.sprite, this.flipped, this.layer);
+}
+
+class CurrentRoomComponent extends Component {
+  Entity room;
+  CurrentRoomComponent(this.room);
 }
