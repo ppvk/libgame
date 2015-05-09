@@ -17,12 +17,12 @@ class DrawSystem extends EntityProcessingSystem {
   processEntity(Entity entity) {
 
     PositionComponent   positionComponent = positionMapper[entity];
-    SpriteComponent     spriteComponent = spriteMapper[entity];
-    CurrentRoomComponent       roomComponent = roomMapper[entity];
+    SpriteComponent spriteComponent = spriteMapper[entity];
+    CurrentRoomComponent currentRoom = roomMapper[entity];
 
     // Add the Sprite to the entity's room, if not there already.
     RoomComponent roomDisplay =
-      roomComponent.room.getComponentByClass(RoomComponent);
+      currentRoom.room.getComponentByClass(RoomComponent);
 
 
     if (!roomDisplay.foreground.contains(spriteComponent.sprite) && spriteComponent.layer == 'foreground') {
@@ -37,10 +37,10 @@ class DrawSystem extends EntityProcessingSystem {
       roomDisplay.background.addChild(spriteComponent.sprite);
     }
 
-    RoomComponent roomEntityBag =
-      roomComponent.room.getComponentByClass(RoomComponent);
-    if (!roomEntityBag.entities.contains(entity))
-      roomEntityBag.entities.add(entity);
+    RoomComponent roomEntities =
+      currentRoom.room.getComponentByClass(RoomComponent);
+    if (!roomEntities.entities.contains(entity))
+      roomEntities.entities.add(entity);
 
     // Update the sprite's position
     if (spriteComponent.sprite.x != positionComponent.x)
@@ -58,11 +58,11 @@ class DrawSystem extends EntityProcessingSystem {
 
   removed(Entity entity) {
     SpriteComponent     spriteComponent = spriteMapper[entity];
-    CurrentRoomComponent roomComponent = roomMapper[entity];
+    CurrentRoomComponent currentRoom = roomMapper[entity];
 
     // Remove the sprite from the room.
     RoomComponent roomDisplay =
-      roomComponent.room.getComponentByClass(RoomComponent);
+      currentRoom.room.getComponentByClass(RoomComponent);
 
     if (roomDisplay.foreground.contains(spriteComponent.sprite)) {
       roomDisplay.foreground.removeChild(spriteComponent.sprite);
@@ -76,8 +76,8 @@ class DrawSystem extends EntityProcessingSystem {
       roomDisplay.background.removeChild(spriteComponent.sprite);
     }
 
-    RoomComponent roomEntityBag =
-      roomComponent.room.getComponentByClass(RoomComponent);
-    roomEntityBag.entities.remove(entity);
+    RoomComponent roomEntities =
+      currentRoom.room.getComponentByClass(RoomComponent);
+    roomEntities.entities.remove(entity);
   }
 }

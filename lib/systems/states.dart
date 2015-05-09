@@ -35,11 +35,11 @@ class StateSystem extends EntityProcessingSystem {
 }
 
 
-abstract class State {
-  enter(Entity entity);
-  exit(Entity entity);
-  handleInput(Entity entity);
-  update(Entity entity);
+class State {
+  enter(Entity entity) {}
+  exit(Entity entity) {}
+  handleInput(Entity entity) {}
+  update(Entity entity) {}
 
   goTo(Entity entity, State other) {
     StateMachine stateMachine = entity.getComponentByClass(StateMachine);

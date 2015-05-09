@@ -25,7 +25,7 @@ Future <Entity> createActor(Map actorDef) async {
           actorDef['skeleton'],
           actorDef['flipped'],
           actorDef['layer']));
-
+  WORLD.processEntityChanges();
   actors[actorDef['name']] = entity;
   return entity;
 }

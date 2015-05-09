@@ -16,10 +16,6 @@ class AnimationSystem extends EntityProcessingSystem {
     // Add the Sprite to the entity's room, if not there already.
     if (!STAGE.juggler.contains(animationComponent.animation))
       STAGE.juggler.add(animationComponent.animation);
-
-
-
-
   }
 
   removed(Entity entity) {
@@ -28,7 +24,6 @@ class AnimationSystem extends EntityProcessingSystem {
 
     if (STAGE.juggler.contains(animationComponent.animation))
       STAGE.juggler.remove(animationComponent.animation);
-
   }
 }
 

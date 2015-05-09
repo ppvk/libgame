@@ -75,16 +75,31 @@ class RoomComponent extends Component {
 
   }
 
-  getActorsByTag(String tag) {
+  List getActorsByTag(String tag) {
     List returned = new List();
+
     for (Entity entity in entities) {
       MetaComponent meta = entity.getComponentByClass(MetaComponent);
-      if (meta == null) break;
-      if (meta.meta['tags'].contains(tag));
-        returned.add(entity);
+      if (meta != null) {
+        if (meta.meta['tags'].contains(tag))
+          returned.add(entity);
+      }
     }
     return returned;
   }
 
+  Entity getActorByName(String name) {
 
+    for (Entity entity in entities) {
+      MetaComponent meta = entity.getComponentByClass(MetaComponent);
+      if (meta != null) {
+        print(meta.meta);
+
+        if (meta.meta['name'] == name)
+          return entity;
+      }
+    }
+    throw('Entity $name not found.');
+    return null;
+  }
 }

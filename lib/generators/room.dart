@@ -56,5 +56,5 @@ Entity activateRoom(String room) {
     room.disable();
   rooms[room].enable();
   _activeRoom = rooms[room];
-  rooms[room];
+  return rooms[room];
 }

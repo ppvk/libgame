@@ -6,16 +6,24 @@ import 'dart:io';
 class DefinitionTransformer extends Transformer {
 
   String get allowedExtensions => ".json";
-  DefinitionTransformer.asPlugin();
+
+  final BarbackSettings _settings;
+  DefinitionTransformer.asPlugin(this._settings);
 
   Future apply(Transform transform) async {
-    if (transform.primaryInput.id.path.contains('assets/definition.json')) {
+
+    String assetsPath = _settings.configuration['assets'];
+    if (assetsPath == null)
+      assetsPath = 'web/assets';
+
+
+    if (transform.primaryInput.id.path.contains(assetsPath + '/definition.json')) {
 
 
       Map definitions = JSON.decode(await transform.primaryInput.readAsString());;
 
 
-      Directory assetDir = new Directory('web/assets');
+      Directory assetDir = new Directory(assetsPath);
       List assetDirectories =  assetDir.listSync()
       .where((e) => e is Directory)
       .where((e) => !e.path.contains('packages'));

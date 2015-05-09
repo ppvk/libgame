@@ -1,7 +1,6 @@
 library libgame;
-import 'dart:html';
+import 'dart:html' hide Rectangle, Point;
 import 'dart:convert';
-import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:stagexl/stagexl.dart';
@@ -12,7 +11,8 @@ export 'package:dartemis/dartemis.dart';
 export 'package:stagexl/stagexl.dart';
 
 part 'systems/generic.dart';
-part 'systems/controls.dart';
+part 'singletons/keyboard.dart';
+part 'systems/collisions.dart';
 part 'systems/states.dart';
 part 'systems/camera.dart';
 part 'systems/rooms.dart';
@@ -40,12 +40,12 @@ Map _keybinds;
 List <Function> _gameLoopExtras = [];
 
 init(CanvasElement canvas) async {
-  WORLD = new World();
 
+  WORLD = new World();
   RESOURCES = new ResourceManager();
   CANVAS = canvas;
 
-  STAGE = new Stage(canvas, webGL:true, width: 1024, height: 768, color: Color.Black)
+  STAGE = new Stage(CANVAS, width: 1024, height: 768)
     ..scaleMode = StageScaleMode.NO_BORDER
     ..align = StageAlign.NONE;
 
@@ -71,6 +71,7 @@ init(CanvasElement canvas) async {
   WORLD
     ..addSystem(new CameraSystem())
     ..addSystem(new StateSystem())
+    ..addSystem(new CollisionSystem())
 
     ..addSystem(new VelocitySystem())
     ..addSystem(new AccelerationSystem())
@@ -86,12 +87,25 @@ init(CanvasElement canvas) async {
 
 // A little update loop
 worldLoop() async {
-  await window.animationFrame;
+  await wait(new Duration(milliseconds: 15));
+
   WORLD.process();
-  STAGE.juggler.advanceTime(WORLD.delta);
+
   for (Function f in _gameLoopExtras)
     f();
   worldLoop();
+
 }
 
+/// adds a function to the game loop.
+/// use sparingly.
 addToGameLoop(Function f) => _gameLoopExtras.add(f);
+
+
+
+/// A future that returns after a duration
+Future wait(Duration duration) {
+  Completer completer = new Completer();
+  new Timer(duration, () => completer.complete());
+  return completer.future;
+}
